@@ -12,11 +12,8 @@ import { ENVIRONMENT_CONFIGURATION_FACTORY, EnvironmentConfig } from './config';
         MongooseModule.forRootAsync({
             imports: [ConfigModule],
             inject: [ConfigService],
-            useFactory: async (config: ConfigService) => ({
-                appName: config.get<string>('MONGO_NAME'),
-                uri: config.get<string>('MONGO_URI'),
-                user: config.get<string>('MONGO_USER'),
-                pass: config.get<string>('MONGO_PASS'),
+            useFactory: async (config: ConfigService<EnvironmentConfig>) => ({
+                ...config.get('mongo'),
                 retryWrites: true,
             }),
         }),
