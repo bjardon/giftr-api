@@ -4,6 +4,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { cert } from 'firebase-admin/app';
 import { FirebaseModule } from 'src/modules/firebase';
 import { ENVIRONMENT_CONFIGURATION_FACTORY, EnvironmentConfig } from './config';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
     imports: [
@@ -28,6 +29,7 @@ import { ENVIRONMENT_CONFIGURATION_FACTORY, EnvironmentConfig } from './config';
                 ),
             }),
         }),
+        AuthModule,
     ],
     controllers: [],
     providers: [],
