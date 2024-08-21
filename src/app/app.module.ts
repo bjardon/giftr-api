@@ -2,9 +2,12 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { cert } from 'firebase-admin/app';
-import { FirebaseModule } from 'src/modules/firebase';
-import { ENVIRONMENT_CONFIGURATION_FACTORY, EnvironmentConfig } from './config';
-import { AuthModule } from './auth/auth.module';
+import { FirebaseModule } from '@modules/firebase';
+import {
+    ENVIRONMENT_CONFIGURATION_FACTORY,
+    EnvironmentConfig,
+} from '@config/environment';
+import { AuthModule } from '@app/auth';
 
 @Module({
     imports: [
