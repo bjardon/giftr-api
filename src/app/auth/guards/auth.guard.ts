@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { AuthService } from '@app/auth/services';
 import { Request } from 'express';
-import { isNil } from 'lodash-es';
+import { isNil } from 'lodash';
 import to from 'await-to-js';
 
 @Injectable()

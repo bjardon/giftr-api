@@ -10,7 +10,8 @@
             "request": "launch",
             "runtimeExecutable": "doppler",
             "runtimeArgs": ["run", "--", "npm", "run", "start:dev"],
-            "restart": true
+            "console": "internalConsole",
+            "outputCapture": "std"
         }
     ]
 }
