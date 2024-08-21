@@ -4,7 +4,7 @@ import {
     Injectable,
     UnauthorizedException,
 } from '@nestjs/common';
-import { AuthService } from '../services';
+import { AuthService } from '@app/auth/services';
 import { Request } from 'express';
 import { isNil } from 'lodash-es';
 import to from 'await-to-js';
