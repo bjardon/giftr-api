@@ -11,6 +11,7 @@ export const ENVIRONMENT_CONFIGURATION_FACTORY = (): EnvironmentConfig => {
             pass: process.env.MONGO_PASS ?? '',
             uri: process.env.MONGO_URI ?? '',
             user: process.env.MONGO_USER ?? '',
+            dbName: process.env.MONGO_DB ?? '',
         },
     };
 };
