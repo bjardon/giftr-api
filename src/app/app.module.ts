@@ -8,6 +8,7 @@ import {
     EnvironmentConfig,
 } from '@config/environment';
 import { AuthModule } from '@app/auth';
+import { UsersModule } from '@app/users';
 
 @Module({
     imports: [
@@ -33,6 +34,7 @@ import { AuthModule } from '@app/auth';
             }),
         }),
         AuthModule,
+        UsersModule,
     ],
     controllers: [],
     providers: [],
