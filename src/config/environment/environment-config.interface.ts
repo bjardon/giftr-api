@@ -7,5 +7,6 @@ export interface EnvironmentConfig {
         pass: string;
         uri: string;
         user: string;
+        dbName: string;
     };
 }
