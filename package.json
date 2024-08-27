@@ -27,6 +27,7 @@
         "@nestjs/core": "^10.0.0",
         "@nestjs/mongoose": "^10.0.10",
         "@nestjs/platform-express": "^10.0.0",
+        "@nestjs/swagger": "^7.4.0",
         "@types/lodash": "^4.17.7",
         "await-to-js": "^3.0.0",
         "firebase-admin": "^12.3.1",
