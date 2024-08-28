@@ -21,23 +21,33 @@ jobs:
               run: docker build -t ${{steps.login-ecr.outputs.registry}}/giftr/giftr-api:${{github.run_id}} .
             - name: Push image to registry
               run: docker push ${{steps.login-ecr.outputs.registry}}/giftr/giftr-api:${{github.run_id}}
-    # deploy:
-    #     runs-on: ubuntu-latest
-    #     needs: build
-    #     steps:
-    #         - name: Download artifacts
-    #           uses: actions/download-artifact@v4.1.7
-    #         - name: Configure AWS credentials
-    #           uses: aws-actions/configure-aws-credentials@v4
-    #           with:
-    #               aws-region: us-east-1
-    #               aws-access-key-id: ${{secrets.AWS_ACCESS_KEY_ID}}
-    #               aws-secret-access-key: ${{secrets.AWS_SECRET_ACCESS_KEY}}
-    #         - name: Upload build
-    #           run: aws s3 cp "builds/giftr-build-${{github.run_id}}.zip" s3://elasticbeanstalk-us-east-1-${{secrets.AWS_ACCOUNT_ID}}/artifacts/giftr-api/
-    #         - name: Create version
-    #           run: aws elasticbeanstalk create-application-version --application-name ${{secrets.ELASTIC_BEANSTALK_NAME}} --version-label ${{github.run_id}} --description ${{github.run_id}} --source-bundle S3Bucket="elasticbeanstalk-us-east-1-${{ secrets.AWS_ACCOUNT_ID }}",S3Key="artifacts/giftr-api/giftr-build-${{github.run_id}}.zip"
-    #         - name: Update environment
-    #           run: |
-    #               aws elasticbeanstalk update-environment --application-name ${{secrets.ELASTIC_BEANSTALK_NAME}} --environment-name ${{secrets.ELASTIC_BEANSTALK_ENV_NAME}} --version-label ${{github.run_id}}
-    #               aws elasticbeanstalk wait environment-updated --application-name ${{secrets.ELASTIC_BEANSTALK_NAME}} --environment-name ${{secrets.ELASTIC_BEANSTALK_ENV_NAME}}
+            - name: Build Dockerrun.aws.json
+              run: node generate-dockerrun.mjs ${{steps.login-ecr.outputs.registry}}/giftr/giftr-api:${{github.run_id}} 3000 3000
+            - name: Pack
+              run: zip -r giftr-build-${{github.run_id}}.zip Dockerrun.aws.json
+            - name: Upload artifacts
+              uses: actions/upload-artifact@v4.3.3
+              with:
+                  name: builds
+                  path: giftr-build-${{github.run_id}}.zip
+
+    deploy:
+        runs-on: ubuntu-latest
+        needs: build
+        steps:
+            - name: Download artifacts
+              uses: actions/download-artifact@v4.1.7
+            - name: Configure AWS credentials
+              uses: aws-actions/configure-aws-credentials@v4
+              with:
+                  aws-region: us-east-1
+                  aws-access-key-id: ${{secrets.AWS_ACCESS_KEY_ID}}
+                  aws-secret-access-key: ${{secrets.AWS_SECRET_ACCESS_KEY}}
+            - name: Upload build
+              run: aws s3 cp "builds/giftr-build-${{github.run_id}}.zip" s3://elasticbeanstalk-us-east-1-${{secrets.AWS_ACCOUNT_ID}}/artifacts/giftr-api/
+            - name: Create version
+              run: aws elasticbeanstalk create-application-version --application-name ${{secrets.ELASTIC_BEANSTALK_NAME}} --version-label ${{github.run_id}} --description ${{github.run_id}} --source-bundle S3Bucket="elasticbeanstalk-us-east-1-${{ secrets.AWS_ACCOUNT_ID }}",S3Key="artifacts/giftr-api/giftr-build-${{github.run_id}}.zip"
+            - name: Update environment
+              run: |
+                  aws elasticbeanstalk update-environment --application-name ${{secrets.ELASTIC_BEANSTALK_NAME}} --environment-name ${{secrets.ELASTIC_BEANSTALK_ENV_NAME}} --version-label ${{github.run_id}}
+                  aws elasticbeanstalk wait environment-updated --application-name ${{secrets.ELASTIC_BEANSTALK_NAME}} --environment-name ${{secrets.ELASTIC_BEANSTALK_ENV_NAME}}
