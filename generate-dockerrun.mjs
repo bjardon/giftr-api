@@ -6,7 +6,7 @@ const [image, containerPort, hostPort] = args;
 const fileName = 'Dockerrun.aws.json';
 
 const dockerRun = {
-    AWSEBDockerrunVersion: 1,
+    AWSEBDockerrunVersion: '1',
     // Authentication: {
     //     Bucket: 'amzn-s3-demo-bucket',
     //     Key: 'mydockercfg',
