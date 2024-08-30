@@ -22,7 +22,7 @@ jobs:
             - name: Push image to registry
               run: docker push ${{steps.login-ecr.outputs.registry}}/giftr/giftr-api:${{github.run_id}}
             - name: Build Dockerrun.aws.json
-              run: node generate-dockerrun.mjs ${{steps.login-ecr.outputs.registry}}/giftr/giftr-api:${{github.run_id}} 3000 3000
+              run: node generate-dockerrun.mjs --image ${{steps.login-ecr.outputs.registry}}/giftr/giftr-api:${{github.run_id}} --port 3000:3000
             - name: Pack
               run: zip -r giftr-build-${{github.run_id}}.zip Dockerrun.aws.json
             - name: Upload artifacts
