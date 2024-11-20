@@ -1,7 +1,11 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
 
-@Schema()
+@Schema({
+    id: false,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: false },
+})
 export class UserEntity {
     @Prop({
         type: String,
@@ -20,8 +24,8 @@ export class UserEntity {
 
     @Prop({
         type: String,
-        required: true,
         trim: true,
+        default: null,
     })
     firebaseId: string;
 }
