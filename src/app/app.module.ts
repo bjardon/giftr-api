@@ -9,6 +9,7 @@ import {
 } from '@config/environment';
 import { AuthModule } from '@app/auth';
 import { UsersModule } from '@app/users';
+import { GiftExchangesModule } from '@app/gift-exchanges';
 
 @Module({
     imports: [
@@ -35,6 +36,7 @@ import { UsersModule } from '@app/users';
         }),
         AuthModule,
         UsersModule,
+        GiftExchangesModule,
     ],
     controllers: [],
     providers: [],
