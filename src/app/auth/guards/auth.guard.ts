@@ -49,15 +49,26 @@ export class AuthGuard implements CanActivate {
     private async upsertUserForToken(
         token: DecodedIdToken,
     ): Promise<UserDocument> {
-        const existing = await this.users.findOne({ firebaseId: token.uid });
-        if (!isNil(existing)) return existing;
-
         const firebaseUser = await this.firebase.auth.getUser(token.uid);
-        const user = await this.users.create({
-            name: firebaseUser.displayName,
-            email: firebaseUser.email,
-            firebaseId: firebaseUser.uid,
-        });
+
+        let user = await this.users.findOrCreate(
+            {
+                $or: [
+                    { firebaseId: firebaseUser.uid },
+                    { email: firebaseUser.email },
+                ],
+            },
+            {
+                email: firebaseUser.email,
+                name: firebaseUser.displayName,
+                firebaseId: firebaseUser.uid,
+            },
+        );
+
+        if (isNil(user.firebaseId))
+            user = await this.users.updateById(user._id, {
+                firebaseId: firebaseUser.uid,
+            });
 
         return user;
     }
