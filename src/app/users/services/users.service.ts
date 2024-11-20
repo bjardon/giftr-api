@@ -1,19 +1,20 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { FilterQuery, Model, ObjectId, UpdateQuery } from 'mongoose';
+import { FilterQuery, Model, Types, UpdateQuery } from 'mongoose';
+import { COLLECTIONS } from '@app/users/constants';
 import { UserEntity, UserDocument } from '@app/users/schemas';
 
 @Injectable()
 export class UsersService {
     constructor(
-        @InjectModel(UserEntity.name) private model: Model<UserDocument>,
+        @InjectModel(COLLECTIONS.User) private model: Model<UserDocument>,
     ) {}
 
     async find(filter: FilterQuery<UserDocument>) {
         return await this.model.find(filter);
     }
 
-    async findById(id: string | ObjectId) {
+    async findById(id: string | Types.ObjectId) {
         return this.model.findById(id);
     }
 
@@ -25,7 +26,19 @@ export class UsersService {
         return this.model.create(data);
     }
 
-    async updateById(id: string | ObjectId, update: UpdateQuery<UserDocument>) {
+    async findOrCreate(
+        filter: FilterQuery<UserDocument>,
+        data: Partial<UserEntity>,
+    ) {
+        const found = await this.findOne(filter);
+
+        return found ?? this.model.create(data);
+    }
+
+    async updateById(
+        id: string | Types.ObjectId,
+        update: UpdateQuery<UserDocument>,
+    ) {
         return this.model.findByIdAndUpdate(id, update, { new: true });
     }
 
@@ -46,7 +59,7 @@ export class UsersService {
         });
     }
 
-    async deleteById(id: string | ObjectId) {
+    async deleteById(id: string | Types.ObjectId) {
         return this.model.findByIdAndDelete(id);
     }
 
