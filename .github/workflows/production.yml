@@ -24,7 +24,7 @@ jobs:
             - name: Build Dockerrun.aws.json
               run: node generate-dockerrun.mjs --image ${{steps.login-ecr.outputs.registry}}/giftr/giftr-api:${{github.ref_name}} --port 3000:3000
             - name: Pack
-              run: zip -r giftr-build-${{github.ref_name}}.zip Dockerrun.aws.json
+              run: zip -r giftr-api-build-${{github.ref_name}}.zip Dockerrun.aws.json
             - name: Create release
               env:
                   GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
@@ -33,7 +33,7 @@ jobs:
               uses: actions/upload-artifact@v4.3.3
               with:
                   name: builds
-                  path: giftr-build-${{github.ref_name}}.zip
+                  path: giftr-api-build-${{github.ref_name}}.zip
 
     deploy:
         runs-on: ubuntu-latest
@@ -48,9 +48,9 @@ jobs:
                   aws-access-key-id: ${{secrets.AWS_ACCESS_KEY_ID}}
                   aws-secret-access-key: ${{secrets.AWS_SECRET_ACCESS_KEY}}
             - name: Upload build
-              run: aws s3 cp "builds/giftr-build-${{github.ref_name}}.zip" s3://elasticbeanstalk-us-east-1-${{secrets.AWS_ACCOUNT_ID}}/artifacts/giftr-api/
+              run: aws s3 cp "builds/giftr-api-build-${{github.ref_name}}.zip" s3://elasticbeanstalk-us-east-1-${{secrets.AWS_ACCOUNT_ID}}/artifacts/giftr-api/
             - name: Create version
-              run: aws elasticbeanstalk create-application-version --application-name ${{secrets.ELASTIC_BEANSTALK_NAME}} --version-label ${{github.ref_name}} --description ${{github.ref_name}} --source-bundle S3Bucket="elasticbeanstalk-us-east-1-${{secrets.AWS_ACCOUNT_ID}}",S3Key="artifacts/giftr-api/giftr-build-${{github.ref_name}}.zip"
+              run: aws elasticbeanstalk create-application-version --application-name ${{secrets.ELASTIC_BEANSTALK_NAME}} --version-label ${{github.ref_name}} --description ${{github.ref_name}} --source-bundle S3Bucket="elasticbeanstalk-us-east-1-${{secrets.AWS_ACCOUNT_ID}}",S3Key="artifacts/giftr-api/giftr-api-build-${{github.ref_name}}.zip"
             - name: Update environment
               run: |
                   aws elasticbeanstalk update-environment --application-name ${{secrets.ELASTIC_BEANSTALK_NAME}} --environment-name ${{secrets.ELASTIC_BEANSTALK_ENV_NAME}} --version-label ${{github.ref_name}} --option-settings Namespace=aws:elasticbeanstalk:application:environment,OptionName=DOPPLER_TOKEN,Value=${{secrets.DOPPLER_TOKEN}}
