@@ -1,0 +1,6 @@
+dist/
+node_modules/
+.github/
+.vscode/
+.editorconfig
+Dockerrun.aws.json
