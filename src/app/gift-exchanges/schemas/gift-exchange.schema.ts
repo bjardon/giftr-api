@@ -18,11 +18,18 @@ export class GiftExchangeEntity {
     topic: string;
 
     @Prop({
+        type: String,
+        required: false,
+        default: null,
+    })
+    instructions: string;
+
+    @Prop({
         type: Number,
         required: false,
         default: null,
     })
-    spendAmount: number;
+    budget: number;
 
     @Prop({
         type: Date,
@@ -43,9 +50,26 @@ export class GiftExchangeEntity {
         required: true,
     })
     _organizer: Types.ObjectId;
+
+    get formattedScheduledOn(): string {
+        return this.scheduledOn.toLocaleDateString('es-MX');
+    }
+
+    get formattedBudget(): string {
+        return Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: 'USD',
+        }).format(this.budget);
+    }
 }
 
-export const GiftExchangeSchema =
-    SchemaFactory.createForClass(GiftExchangeEntity);
+const _GiftExchangeSchemaFactory = () => {
+    const schema = SchemaFactory.createForClass(GiftExchangeEntity);
+    schema.loadClass(GiftExchangeEntity);
+
+    return schema;
+};
+
+export const GiftExchangeSchema = _GiftExchangeSchemaFactory();
 
 export type GiftExchangeDocument = HydratedDocument<GiftExchangeEntity>;

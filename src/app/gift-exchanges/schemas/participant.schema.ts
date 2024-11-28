@@ -2,6 +2,7 @@ import { COLLECTIONS as USERS_COLLECTIONS } from '@app/users/constants';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, SchemaTypes, Types } from 'mongoose';
 import { COLLECTIONS } from '../constants';
+import { UserDocument } from '@app/users/schemas';
 
 @Schema({
     id: false,
@@ -41,6 +42,9 @@ export class ParticipantEntity {
         default: null,
     })
     _giftee: Types.ObjectId;
+
+    user?: UserDocument;
+    giftee?: UserDocument;
 }
 
 const _ParticipantSchemaFactory = () => {
