@@ -9,4 +9,7 @@ export interface EnvironmentConfig {
         user: string;
         dbName: string;
     };
+    brevo: {
+        apiKey: string;
+    };
 }

@@ -13,5 +13,8 @@ export const ENVIRONMENT_CONFIGURATION_FACTORY = (): EnvironmentConfig => {
             user: process.env.MONGO_USER ?? '',
             dbName: process.env.MONGO_DB ?? '',
         },
+        brevo: {
+            apiKey: process.env.BREVO_API_KEY ?? '',
+        },
     };
 };

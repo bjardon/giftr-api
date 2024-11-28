@@ -19,6 +19,7 @@ import {
 import { AuthGuard } from '@app/auth/guards';
 import { User } from '@app/users/decorators';
 import { UserDocument } from '@app/users/schemas';
+import { EmailsService } from '@app/emails/services';
 import {
     CreateGiftExchangeDto,
     GiftExchangeEntityDto,
@@ -30,6 +31,7 @@ import {
     GiftExchangesService,
 } from '@app/gift-exchanges/services';
 import { first, isEmpty, shuffle } from 'lodash';
+import { EMAIL_TEMPLATES } from '../constants';
 
 @ApiTags('GiftExchanges')
 @Controller('gift-exchanges')
@@ -37,6 +39,7 @@ export class GiftExchangesController {
     constructor(
         private readonly giftExchanges: GiftExchangesService,
         private readonly participants: ParticipantsService,
+        private readonly emails: EmailsService,
     ) {}
 
     @Get()
@@ -109,6 +112,43 @@ export class GiftExchangesController {
         return exchange;
     }
 
+    @Post(':exchangeId/resend-welcome')
+    @UseGuards(AuthGuard)
+    @ApiOperation({
+        summary: 'Resend welcome email',
+        description:
+            'Resends the welcome email to all participants in the gift exchange',
+    })
+    @ApiBearerAuth()
+    async resendWelcomeEmailById(
+        @User() user: UserDocument,
+        @Param('exchangeId') exchangeId: string,
+    ) {
+        const exchange = await this.giftExchanges.findById(exchangeId);
+
+        if (!user._id.equals(exchange._organizer))
+            throw new UnauthorizedException('giftexchanges.organizer.match');
+
+        const participants = await this.participants.find({
+            _exchange: exchange._id,
+        });
+
+        const to = participants.map(({ user }) => ({
+            email: user.email,
+            name: user.name,
+        }));
+        const params = {
+            giftExchange: exchange.toObject({ virtuals: true }),
+            organizer: user.toObject({ virtuals: true }),
+        };
+
+        await this.emails.sendEmail({
+            templateId: EMAIL_TEMPLATES.WELCOME_EMAIL,
+            to,
+            params,
+        });
+    }
+
     @Patch(':exchangeId/draw-names')
     @UseGuards(AuthGuard)
     @ApiOperation({
@@ -155,6 +195,51 @@ export class GiftExchangesController {
         return this.giftExchanges.updateById(exchange._id, {
             drawnOn: new Date(),
         });
+    }
+
+    @Post(':exchangeId/resend-draw')
+    @UseGuards(AuthGuard)
+    @ApiOperation({
+        summary: 'Resend draw email',
+        description:
+            'Resends the draw result email to all participants in the gift exchange',
+    })
+    @ApiBearerAuth()
+    async resendDrawById(
+        @User() user: UserDocument,
+        @Param('exchangeId') exchangeId: string,
+    ) {
+        const exchange = await this.giftExchanges.findById(exchangeId);
+
+        if (!user._id.equals(exchange._organizer))
+            throw new UnauthorizedException('giftexchanges.organizer.match');
+
+        if (!exchange.drawnOn)
+            throw new ConflictException('giftexchanges.draw.required');
+
+        const participants = await this.participants.find({
+            _exchange: exchange._id,
+            acknowledgedOn: { $exists: true, $ne: null },
+        });
+
+        await Promise.all(
+            participants.map(async (participant) => {
+                const { user, giftee } = participant;
+
+                const to = [{ email: user.email, name: user.name }];
+                const params = {
+                    giftExchange: exchange.toObject({ virtuals: true }),
+                    organizer: user.toObject({ virtuals: true }),
+                    giftee: giftee.toObject({ virtuals: true }),
+                };
+
+                await this.emails.sendEmail({
+                    templateId: EMAIL_TEMPLATES.DRAW_EMAIL,
+                    to,
+                    params,
+                });
+            }),
+        );
     }
 
     @Delete(':exchangeId')
