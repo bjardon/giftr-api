@@ -29,7 +29,7 @@ export class GiftExchangeEntityDto extends OmitType(GiftExchangeEntity, []) {
         description: '',
         nullable: true,
     })
-    spendAmount: number;
+    budget: number;
 
     @ApiProperty({
         type: Date,

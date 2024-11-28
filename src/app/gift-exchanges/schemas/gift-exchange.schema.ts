@@ -29,7 +29,7 @@ export class GiftExchangeEntity {
         required: false,
         default: null,
     })
-    spendAmount: number;
+    budget: number;
 
     @Prop({
         type: Date,
