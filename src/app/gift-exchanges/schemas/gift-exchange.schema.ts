@@ -18,6 +18,13 @@ export class GiftExchangeEntity {
     topic: string;
 
     @Prop({
+        type: String,
+        required: false,
+        default: null,
+    })
+    instructions: string;
+
+    @Prop({
         type: Number,
         required: false,
         default: null,

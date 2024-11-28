@@ -18,6 +18,13 @@ export class GiftExchangeEntityDto extends OmitType(GiftExchangeEntity, []) {
     topic: string;
 
     @ApiProperty({
+        type: String,
+        description: '',
+        nullable: true,
+    })
+    instructions: string;
+
+    @ApiProperty({
         type: Number,
         description: '',
         nullable: true,
