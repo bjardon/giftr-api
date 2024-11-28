@@ -10,6 +10,7 @@ import {
 import { AuthModule } from '@app/auth';
 import { UsersModule } from '@app/users';
 import { GiftExchangesModule } from '@app/gift-exchanges';
+import { EmailsModule } from '@app/emails';
 
 @Module({
     imports: [
@@ -36,6 +37,7 @@ import { GiftExchangesModule } from '@app/gift-exchanges';
         }),
         AuthModule,
         UsersModule,
+        EmailsModule,
         GiftExchangesModule,
     ],
     controllers: [],
