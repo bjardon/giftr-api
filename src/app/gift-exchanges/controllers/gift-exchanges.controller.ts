@@ -42,10 +42,10 @@ export class GiftExchangesController {
         private readonly emails: EmailsService,
     ) {}
 
-    @Get()
+    @Get('own')
     @UseGuards(AuthGuard)
     @ApiOperation({
-        summary: 'Get gift exchanges',
+        summary: 'Get own gift exchanges',
         description:
             'Returns a collection of gift exchange entities created by the authenticated user',
     })
@@ -55,7 +55,7 @@ export class GiftExchangesController {
         isArray: true,
         description: 'The gift exchange entities',
     })
-    async find(@User() user: UserDocument): Promise<GiftExchangeDocument[]> {
+    async findOwn(@User() user: UserDocument): Promise<GiftExchangeDocument[]> {
         const exchanges = await this.giftExchanges.find({
             _organizer: user._id,
         });
