@@ -1,8 +1,9 @@
 import { COLLECTIONS as USERS_COLLECTIONS } from '@app/users/constants';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, SchemaTypes, Types } from 'mongoose';
-import { COLLECTIONS } from '../constants';
+import { COLLECTIONS } from '@app/gift-exchanges/constants';
 import { UserDocument } from '@app/users/schemas';
+import { WishListItemDocument } from './wish-list-item.schema';
 
 @Schema({
     id: false,
@@ -45,6 +46,7 @@ export class ParticipantEntity {
 
     user?: UserDocument;
     giftee?: UserDocument;
+    wishList?: WishListItemDocument[];
 }
 
 const _ParticipantSchemaFactory = () => {
@@ -63,8 +65,15 @@ const _ParticipantSchemaFactory = () => {
         foreignField: '_id',
         justOne: true,
         options: {
-            populate: ['user'],
+            populate: ['user', 'wishList'],
         },
+    });
+
+    schema.virtual('wishList', {
+        ref: COLLECTIONS.WishListItem,
+        localField: '_id',
+        foreignField: '_participant',
+        justOne: false,
     });
 
     return schema;
