@@ -85,6 +85,29 @@ export class GiftExchangeParticipantsController {
         return participant;
     }
 
+    @Get('self')
+    @UseGuards(AuthGuard)
+    @ApiOperation({
+        summary: 'Get own participant',
+        description:
+            'Returns the participant entity corresponding to the signed in user',
+    })
+    @ApiOkResponse({
+        type: ParticipantEntityDto,
+        description: 'The participant entity',
+    })
+    async getSelf(
+        @User() user: UserDocument,
+        @Param('exchangeId') exchangeId: string,
+    ): Promise<ParticipantDocument> {
+        const participant = await this.participants.findOne({
+            _exchange: exchangeId,
+            _user: user._id,
+        });
+
+        return participant;
+    }
+
     @Post('self')
     @UseGuards(AuthGuard)
     @ApiOperation({
