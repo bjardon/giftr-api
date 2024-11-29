@@ -4,6 +4,7 @@ import { COLLECTIONS } from '@app/gift-exchanges/constants';
 import {
     ParticipantSchema,
     GiftExchangeSchema,
+    WishListItemSchema,
 } from '@app/gift-exchanges/schemas';
 import {
     ParticipantsService,
@@ -28,6 +29,10 @@ import { ParticipantWishListItemsController } from './controllers/participant-wi
             {
                 name: COLLECTIONS.Participant,
                 useFactory: () => ParticipantSchema,
+            },
+            {
+                name: COLLECTIONS.WishListItem,
+                useFactory: () => WishListItemSchema,
             },
         ]),
     ],
