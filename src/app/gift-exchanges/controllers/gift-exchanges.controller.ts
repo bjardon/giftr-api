@@ -63,6 +63,36 @@ export class GiftExchangesController {
         return exchanges;
     }
 
+    @Get('participating')
+    @UseGuards(AuthGuard)
+    @ApiOperation({
+        summary: 'Get participating gift exchanges',
+        description:
+            'Returns a collection of gift exchange entities in which the authenticated user is participating',
+    })
+    @ApiBearerAuth()
+    @ApiOkResponse({
+        type: GiftExchangeEntityDto,
+        isArray: true,
+        description: 'The gift exchange entities',
+    })
+    async findParticipating(
+        @User() user: UserDocument,
+    ): Promise<GiftExchangeDocument[]> {
+        const participations = await this.participants.find({
+            _user: user._id,
+        });
+
+        if (isEmpty(participations)) return [];
+
+        const exchangeIds = participations.map((doc) => doc._exchange);
+        const exchanges = await this.giftExchanges.find({
+            _id: { $in: exchangeIds },
+        });
+
+        return exchanges;
+    }
+
     @Post()
     @UseGuards(AuthGuard)
     @ApiOperation({
