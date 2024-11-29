@@ -42,10 +42,10 @@ export class GiftExchangesController {
         private readonly emails: EmailsService,
     ) {}
 
-    @Get()
+    @Get('own')
     @UseGuards(AuthGuard)
     @ApiOperation({
-        summary: 'Get gift exchanges',
+        summary: 'Get own gift exchanges',
         description:
             'Returns a collection of gift exchange entities created by the authenticated user',
     })
@@ -55,9 +55,39 @@ export class GiftExchangesController {
         isArray: true,
         description: 'The gift exchange entities',
     })
-    async find(@User() user: UserDocument): Promise<GiftExchangeDocument[]> {
+    async findOwn(@User() user: UserDocument): Promise<GiftExchangeDocument[]> {
         const exchanges = await this.giftExchanges.find({
             _organizer: user._id,
+        });
+
+        return exchanges;
+    }
+
+    @Get('participating')
+    @UseGuards(AuthGuard)
+    @ApiOperation({
+        summary: 'Get participating gift exchanges',
+        description:
+            'Returns a collection of gift exchange entities in which the authenticated user is participating',
+    })
+    @ApiBearerAuth()
+    @ApiOkResponse({
+        type: GiftExchangeEntityDto,
+        isArray: true,
+        description: 'The gift exchange entities',
+    })
+    async findParticipating(
+        @User() user: UserDocument,
+    ): Promise<GiftExchangeDocument[]> {
+        const participations = await this.participants.find({
+            _user: user._id,
+        });
+
+        if (isEmpty(participations)) return [];
+
+        const exchangeIds = participations.map((doc) => doc._exchange);
+        const exchanges = await this.giftExchanges.find({
+            _id: { $in: exchangeIds },
         });
 
         return exchanges;
