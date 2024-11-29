@@ -7,6 +7,10 @@ async function bootstrap() {
 
     app.setGlobalPrefix('api');
 
+    app.enableCors({
+        origin: '*',
+    });
+
     const swaggerConfig = new DocumentBuilder()
         .setTitle('Giftr API')
         .setDescription(
