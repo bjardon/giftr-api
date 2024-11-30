@@ -159,9 +159,12 @@ export class GiftExchangesController {
         if (!user._id.equals(exchange._organizer))
             throw new UnauthorizedException('giftexchanges.organizer.match');
 
-        const participants = await this.participants.find({
-            _exchange: exchange._id,
-        });
+        const participants = await this.participants.find(
+            {
+                _exchange: exchange._id,
+            },
+            { populate: ['user'] },
+        );
 
         const to = participants.map(({ user }) => ({
             email: user.email,
@@ -247,10 +250,13 @@ export class GiftExchangesController {
         if (!exchange.drawnOn)
             throw new ConflictException('giftexchanges.draw.required');
 
-        const participants = await this.participants.find({
-            _exchange: exchange._id,
-            acknowledgedOn: { $exists: true, $ne: null },
-        });
+        const participants = await this.participants.find(
+            {
+                _exchange: exchange._id,
+                acknowledgedOn: { $exists: true, $ne: null },
+            },
+            { populate: ['user', 'giftee'] },
+        );
 
         await Promise.all(
             participants.map(async (participant) => {
