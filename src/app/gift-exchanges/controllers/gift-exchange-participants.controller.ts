@@ -51,9 +51,12 @@ export class GiftExchangeParticipantsController {
         @User() user: UserDocument,
         @Param('exchangeId') exchangeId: string,
     ): Promise<ParticipantDocument[]> {
-        const participants = await this.participants.find({
-            _exchange: exchangeId,
-        });
+        const participants = await this.participants.find(
+            {
+                _exchange: exchangeId,
+            },
+            { populate: ['user'] },
+        );
 
         return participants;
     }
@@ -100,10 +103,13 @@ export class GiftExchangeParticipantsController {
         @User() user: UserDocument,
         @Param('exchangeId') exchangeId: string,
     ): Promise<ParticipantDocument> {
-        const participant = await this.participants.findOne({
-            _exchange: exchangeId,
-            _user: user._id,
-        });
+        const participant = await this.participants.findOne(
+            {
+                _exchange: exchangeId,
+                _user: user._id,
+            },
+            { populate: ['user', 'giftee'] },
+        );
 
         return participant;
     }
