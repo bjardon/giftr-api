@@ -14,16 +14,22 @@ export class ParticipantsService {
         private readonly model: Model<ParticipantDocument>,
     ) {}
 
-    async find(filter: FilterQuery<ParticipantDocument>) {
-        return await this.model.find(filter).populate(['user', 'giftee']);
+    async find(
+        filter: FilterQuery<ParticipantDocument>,
+        options: { populate?: string[] } = {},
+    ) {
+        return await this.model.find(filter).populate(options.populate ?? []);
     }
 
     async findById(id: string | Types.ObjectId) {
         return this.model.findById(id);
     }
 
-    async findOne(filter: FilterQuery<ParticipantDocument>) {
-        return this.model.findOne(filter);
+    async findOne(
+        filter: FilterQuery<ParticipantDocument>,
+        options: { populate?: string[] } = {},
+    ) {
+        return this.model.findOne(filter).populate(options.populate ?? []);
     }
 
     async create(data: Partial<ParticipantEntity>) {
