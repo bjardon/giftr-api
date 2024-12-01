@@ -133,13 +133,10 @@ export class GiftExchangeParticipantsController {
         @User() user: UserDocument,
         @Param('exchangeId') exchangeId: string,
     ): Promise<ParticipantDocument> {
-        const participant = await this.participants.findOne(
-            {
-                _exchange: exchangeId,
-                _user: user._id,
-            },
-            { populate: ['user'] },
-        );
+        const participant = await this.participants.findOne({
+            _exchange: exchangeId,
+            _user: user._id,
+        });
 
         if (!participant) throw new NotFoundException('participant.notfound');
 
@@ -148,7 +145,7 @@ export class GiftExchangeParticipantsController {
 
         const giftee = await this.participants.findOne(
             { _id: participant._giftee },
-            { populate: ['wishList'] },
+            { populate: ['user', 'wishList'] },
         );
 
         return giftee;
