@@ -39,6 +39,13 @@ export class GiftExchangeEntityDto extends OmitType(GiftExchangeEntity, []) {
     scheduledOn: Date;
 
     @ApiProperty({
+        type: Date,
+        description: '',
+        nullable: true,
+    })
+    drawnOn: Date;
+
+    @ApiProperty({
         type: String,
         description: '',
         nullable: false,

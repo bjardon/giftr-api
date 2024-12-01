@@ -1,4 +1,11 @@
-import { Controller, Delete, Param, Patch, UseGuards } from '@nestjs/common';
+import {
+    Body,
+    Controller,
+    Delete,
+    Param,
+    Patch,
+    UseGuards,
+} from '@nestjs/common';
 import {
     ApiBearerAuth,
     ApiOkResponse,
@@ -7,13 +14,46 @@ import {
 } from '@nestjs/swagger';
 import { AuthGuard } from '@app/auth/guards';
 import { ParticipantsService } from '@app/gift-exchanges/services';
-import { ParticipantEntityDto } from '@app/gift-exchanges/dtos';
+import {
+    ParticipantEntityDto,
+    UpdateParticipantDto,
+} from '@app/gift-exchanges/dtos';
 import { ParticipantDocument } from '@app/gift-exchanges/schemas';
+import { User } from '@app/users/decorators';
+import { UserDocument } from '@app/users/schemas';
 
 @ApiTags('Participants')
 @Controller('participants')
 export class ParticipantsController {
     constructor(private readonly participants: ParticipantsService) {}
+
+    @Patch(':participantId')
+    @UseGuards(AuthGuard)
+    @ApiOperation({
+        summary: 'Update participant',
+        description:
+            'Updates and returns the participant identified by the provided id',
+    })
+    @ApiBearerAuth()
+    @ApiOkResponse({
+        type: ParticipantEntityDto,
+        description: 'The participant entity',
+    })
+    async updateById(
+        @User() user: UserDocument,
+        @Param('participantId') participantId: string,
+        @Body() data: UpdateParticipantDto,
+    ): Promise<ParticipantDocument> {
+        const participant = await this.participants.updateOne(
+            {
+                _id: participantId,
+                _user: user._id,
+            },
+            { $set: data },
+        );
+
+        return participant;
+    }
 
     @Patch(':participantId/acknowledge')
     @UseGuards(AuthGuard)
@@ -36,7 +76,7 @@ export class ParticipantsController {
                 _exchange: exchangeId,
                 _id: participantId,
             },
-            { acknowledgedOn: new Date() },
+            { $set: { acknowledgedOn: new Date() } },
         );
 
         return participant;
