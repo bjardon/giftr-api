@@ -1,8 +1,10 @@
 import {
     Body,
+    ConflictException,
     Controller,
     Delete,
     Get,
+    NotFoundException,
     Param,
     Patch,
     Post,
@@ -95,6 +97,7 @@ export class GiftExchangeParticipantsController {
         description:
             'Returns the participant entity corresponding to the signed in user',
     })
+    @ApiBearerAuth()
     @ApiOkResponse({
         type: ParticipantEntityDto,
         description: 'The participant entity',
@@ -112,6 +115,43 @@ export class GiftExchangeParticipantsController {
         );
 
         return participant;
+    }
+
+    @Get('giftee')
+    @UseGuards(AuthGuard)
+    @ApiOperation({
+        summary: 'Get own giftee',
+        description:
+            'Returns the participant entity corresponding to the signed in user giftee',
+    })
+    @ApiBearerAuth()
+    @ApiOkResponse({
+        type: ParticipantEntityDto,
+        description: 'The participant entity',
+    })
+    async getOwnGiftee(
+        @User() user: UserDocument,
+        @Param('exchangeId') exchangeId: string,
+    ): Promise<ParticipantDocument> {
+        const participant = await this.participants.findOne(
+            {
+                _exchange: exchangeId,
+                _user: user._id,
+            },
+            { populate: ['user', 'giftee'] },
+        );
+
+        if (!participant) throw new NotFoundException('participant.notfound');
+
+        if (!participant._giftee)
+            throw new ConflictException('giftexchanges.draw.pending');
+
+        const giftee = await this.participants.findOne(
+            { _id: participant._giftee },
+            { populate: ['wishList'] },
+        );
+
+        return giftee;
     }
 
     @Post('self')
