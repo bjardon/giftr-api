@@ -111,7 +111,7 @@ export class GiftExchangeParticipantsController {
                 _exchange: exchangeId,
                 _user: user._id,
             },
-            { populate: ['user', 'giftee'] },
+            { populate: ['user'] },
         );
 
         return participant;
@@ -138,7 +138,7 @@ export class GiftExchangeParticipantsController {
                 _exchange: exchangeId,
                 _user: user._id,
             },
-            { populate: ['user', 'giftee'] },
+            { populate: ['user'] },
         );
 
         if (!participant) throw new NotFoundException('participant.notfound');
