@@ -12,6 +12,13 @@ import { WishListItemDocument } from './wish-list-item.schema';
 })
 export class ParticipantEntity {
     @Prop({
+        type: String,
+        required: false,
+        default: null,
+    })
+    address: string;
+
+    @Prop({
         type: Date,
         required: false,
         default: Date.now(),
