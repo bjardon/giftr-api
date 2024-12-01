@@ -4,5 +4,6 @@ export * from './create-wish-list-item.dto';
 export * from './gift-exchange-entity.dto';
 export * from './participant-entity.dto';
 export * from './update-gift-exchange.dto';
+export * from './update-participant.dto';
 export * from './update-wish-list-item.dto';
 export * from './wish-list-item-entity.dto';
