@@ -1,13 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { FilterQuery, Model, Types, UpdateQuery } from 'mongoose';
-import { COLLECTIONS } from '@app/users/constants';
-import { UserEntity, UserDocument } from '@app/users/schemas';
+import { USERS_MODULE_COLLECTIONS } from '../constants';
+import { UserEntity, UserDocument } from '../schemas';
 
 @Injectable()
 export class UsersService {
     constructor(
-        @InjectModel(COLLECTIONS.User) private model: Model<UserDocument>,
+        @InjectModel(USERS_MODULE_COLLECTIONS.User)
+        private model: Model<UserDocument>,
     ) {}
 
     async find(filter: FilterQuery<UserDocument>) {
