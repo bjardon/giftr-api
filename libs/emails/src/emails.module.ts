@@ -1,9 +1,9 @@
-import { Global, Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { EmailsService } from './services';
+import { ConfigModule } from '@nestjs/config';
 
-@Global()
 @Module({
-    imports: [],
+    imports: [ConfigModule],
     providers: [EmailsService],
     controllers: [],
     exports: [EmailsService],

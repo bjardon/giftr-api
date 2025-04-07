@@ -4,7 +4,7 @@ import {
     TransactionalEmailsApi,
     TransactionalEmailsApiApiKeys,
 } from '@getbrevo/brevo';
-import { EnvironmentConfig } from '@config/environment';
+import { EnvironmentConfig } from '@shared/config';
 
 @Injectable()
 export class EmailsService {
