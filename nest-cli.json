@@ -1,8 +1,75 @@
 {
     "$schema": "https://json.schemastore.org/nest-cli",
     "collection": "@nestjs/schematics",
-    "sourceRoot": "src",
     "compilerOptions": {
-        "deleteOutDir": true
+        "deleteOutDir": true,
+        "webpack": true,
+        "webpackConfigPath": "webpack.config.js"
+    },
+    "monorepo": true,
+    "projects": {
+        "firebase": {
+            "type": "library",
+            "root": "libs/firebase",
+            "entryFile": "index",
+            "sourceRoot": "libs/firebase/src",
+            "compilerOptions": {
+                "tsConfigPath": "libs/firebase/tsconfig.lib.json"
+            }
+        },
+        "auth": {
+            "type": "library",
+            "root": "libs/auth",
+            "entryFile": "index",
+            "sourceRoot": "libs/auth/src",
+            "compilerOptions": {
+                "tsConfigPath": "libs/auth/tsconfig.lib.json"
+            }
+        },
+        "emails": {
+            "type": "library",
+            "root": "libs/emails",
+            "entryFile": "index",
+            "sourceRoot": "libs/emails/src",
+            "compilerOptions": {
+                "tsConfigPath": "libs/emails/tsconfig.lib.json"
+            }
+        },
+        "config": {
+            "type": "library",
+            "root": "libs/config",
+            "entryFile": "index",
+            "sourceRoot": "libs/config/src",
+            "compilerOptions": {
+                "tsConfigPath": "libs/config/tsconfig.lib.json"
+            }
+        },
+        "users": {
+            "type": "library",
+            "root": "libs/users",
+            "entryFile": "index",
+            "sourceRoot": "libs/users/src",
+            "compilerOptions": {
+                "tsConfigPath": "libs/users/tsconfig.lib.json"
+            }
+        },
+        "users-api": {
+            "type": "application",
+            "root": "apps/users-api",
+            "entryFile": "main",
+            "sourceRoot": "apps/users-api/src",
+            "compilerOptions": {
+                "tsConfigPath": "apps/users-api/tsconfig.app.json"
+            }
+        },
+        "gift-exchanges-api": {
+            "type": "application",
+            "root": "apps/gift-exchanges-api",
+            "entryFile": "main",
+            "sourceRoot": "apps/gift-exchanges-api/src",
+            "compilerOptions": {
+                "tsConfigPath": "apps/gift-exchanges-api/tsconfig.app.json"
+            }
+        }
     }
 }
