@@ -4,14 +4,13 @@ import {
     Injectable,
     UnauthorizedException,
 } from '@nestjs/common';
-import { AuthService } from '@app/auth/services';
 import { Request } from 'express';
 import { isNil } from 'lodash';
 import to from 'await-to-js';
-import { UsersService } from '@app/users/services';
 import { DecodedIdToken } from 'firebase-admin/auth';
-import { UserDocument } from '@app/users/schemas';
-import { FirebaseService } from '@modules/firebase/services';
+import { UsersService, UserDocument } from '@shared/users';
+import { FirebaseService } from '@shared/firebase';
+import { AuthService } from '../services';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -33,6 +32,7 @@ export class AuthGuard implements CanActivate {
         const [decodeErr, decodedToken] = await to(
             this.authService.decodeToken(token),
         );
+
         if (!isNil(decodeErr)) throw new UnauthorizedException('Invalid token');
 
         const user = await this.upsertUserForToken(decodedToken);
