@@ -12,10 +12,10 @@ import {
     ApiOperation,
     ApiTags,
 } from '@nestjs/swagger';
-import { WishListItemsService } from '../services';
+import { AuthGuard } from '@shared/auth';
 import { UpdateWishListItemDto, WishListItemEntityDto } from '../dtos';
 import { WishListItemDocument } from '../schemas';
-import { AuthGuard } from '@app/auth/guards';
+import { WishListItemsService } from '../services';
 
 @ApiTags('WishListItems')
 @Controller('wish-list-items')

@@ -12,15 +12,11 @@ import {
     ApiOperation,
     ApiTags,
 } from '@nestjs/swagger';
-import { AuthGuard } from '@app/auth/guards';
-import { ParticipantsService } from '@app/gift-exchanges/services';
-import {
-    ParticipantEntityDto,
-    UpdateParticipantDto,
-} from '@app/gift-exchanges/dtos';
-import { ParticipantDocument } from '@app/gift-exchanges/schemas';
-import { User } from '@app/users/decorators';
-import { UserDocument } from '@app/users/schemas';
+import { AuthGuard } from '@shared/auth';
+import { User, UserDocument } from '@shared/users';
+import { ParticipantEntityDto, UpdateParticipantDto } from '../dtos';
+import { ParticipantDocument } from '../schemas';
+import { ParticipantsService } from '../services';
 
 @ApiTags('Participants')
 @Controller('participants')

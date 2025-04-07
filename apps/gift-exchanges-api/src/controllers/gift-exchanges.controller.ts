@@ -16,22 +16,18 @@ import {
     ApiOperation,
     ApiTags,
 } from '@nestjs/swagger';
-import { AuthGuard } from '@app/auth/guards';
-import { User } from '@app/users/decorators';
-import { UserDocument } from '@app/users/schemas';
-import { EmailsService } from '@app/emails/services';
+import { first, isEmpty, shuffle } from 'lodash';
+import { AuthGuard } from '@shared/auth';
+import { EmailsService } from '@shared/emails';
+import { User, UserDocument } from '@shared/users';
+import { EMAIL_TEMPLATES } from '../constants';
 import {
     CreateGiftExchangeDto,
     GiftExchangeEntityDto,
     UpdateGiftExchangeDto,
-} from '@app/gift-exchanges/dtos';
-import { GiftExchangeDocument } from '@app/gift-exchanges/schemas';
-import {
-    ParticipantsService,
-    GiftExchangesService,
-} from '@app/gift-exchanges/services';
-import { first, isEmpty, shuffle } from 'lodash';
-import { EMAIL_TEMPLATES } from '../constants';
+} from '../dtos';
+import { GiftExchangeDocument } from '../schemas';
+import { ParticipantsService, GiftExchangesService } from '../services';
 
 @ApiTags('GiftExchanges')
 @Controller('gift-exchanges')

@@ -1,8 +1,7 @@
-import { COLLECTIONS as USERS_COLLECTIONS } from '@app/users/constants';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, SchemaTypes, Types } from 'mongoose';
-import { COLLECTIONS } from '@app/gift-exchanges/constants';
-import { UserDocument } from '@app/users/schemas';
+import { USERS_MODULE_COLLECTIONS, UserDocument } from '@shared/users';
+import { GIFT_EXCHANGES_MODULE_COLLECTIONS } from '../constants';
 import { WishListItemDocument } from './wish-list-item.schema';
 
 @Schema({
@@ -60,14 +59,14 @@ const _ParticipantSchemaFactory = () => {
     const schema = SchemaFactory.createForClass(ParticipantEntity);
 
     schema.virtual('user', {
-        ref: USERS_COLLECTIONS.User,
+        ref: USERS_MODULE_COLLECTIONS.User,
         localField: '_user',
         foreignField: '_id',
         justOne: true,
     });
 
     schema.virtual('giftee', {
-        ref: COLLECTIONS.Participant,
+        ref: GIFT_EXCHANGES_MODULE_COLLECTIONS.Participant,
         localField: '_giftee',
         foreignField: '_id',
         justOne: true,
@@ -77,7 +76,7 @@ const _ParticipantSchemaFactory = () => {
     });
 
     schema.virtual('wishList', {
-        ref: COLLECTIONS.WishListItem,
+        ref: GIFT_EXCHANGES_MODULE_COLLECTIONS.WishListItem,
         localField: '_id',
         foreignField: '_participant',
         justOne: false,

@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, SchemaTypes, Types } from 'mongoose';
-import { COLLECTIONS } from '@app/gift-exchanges/constants';
+import { GIFT_EXCHANGES_MODULE_COLLECTIONS } from '../constants';
 
 @Schema({
     id: false,
@@ -31,7 +31,7 @@ const _WishListItemSchemaFactory = () => {
     const schema = SchemaFactory.createForClass(WishListItemEntity);
 
     schema.virtual('participant', {
-        ref: COLLECTIONS.Participant,
+        ref: GIFT_EXCHANGES_MODULE_COLLECTIONS.Participant,
         localField: '_participant',
         foreignField: '_id',
         justOne: true,

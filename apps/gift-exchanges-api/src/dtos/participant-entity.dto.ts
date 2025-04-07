@@ -1,10 +1,7 @@
 import { ApiProperty, OmitType } from '@nestjs/swagger';
-import {
-    ParticipantEntity,
-    WishListItemEntity,
-} from '@app/gift-exchanges/schemas';
 import { ObjectId } from 'mongoose';
-import { UserEntityDto } from '@app/users/dtos';
+import { ParticipantEntity, WishListItemEntity } from '../schemas';
+// import { UserEntityDto } from '@shared/users';
 
 export class ParticipantEntityDto extends OmitType(ParticipantEntity, []) {
     @ApiProperty({
@@ -50,7 +47,7 @@ export class ParticipantEntityDto extends OmitType(ParticipantEntity, []) {
     _giftee: ObjectId;
 
     @ApiProperty({
-        type: UserEntityDto,
+        // type: UserEntityDto,
         nullable: true,
     })
     user: Record<string, unknown>;

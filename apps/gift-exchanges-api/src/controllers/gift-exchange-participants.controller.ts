@@ -16,17 +16,12 @@ import {
     ApiOperation,
     ApiTags,
 } from '@nestjs/swagger';
-import { AuthGuard } from '@app/auth/guards';
-import { User } from '@app/users/decorators';
-import { UserDocument } from '@app/users/schemas';
-import { UsersService } from '@app/users/services';
-import {
-    CreateParticipantWithEmailDto,
-    ParticipantEntityDto,
-} from '@app/gift-exchanges/dtos';
-import { ParticipantDocument } from '@app/gift-exchanges/schemas';
-import { ParticipantsService } from '@app/gift-exchanges/services';
 import { Types } from 'mongoose';
+import { AuthGuard } from '@shared/auth';
+import { User, UserDocument, UsersService } from '@shared/users';
+import { CreateParticipantWithEmailDto, ParticipantEntityDto } from '../dtos';
+import { ParticipantDocument } from '../schemas';
+import { ParticipantsService } from '../services';
 
 @ApiTags('GiftExchanges/Participants')
 @Controller('gift-exchanges/:exchangeId/participants')

@@ -1,16 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { FilterQuery, Model, Types, UpdateQuery } from 'mongoose';
-import { COLLECTIONS } from '@app/gift-exchanges/constants';
-import {
-    ParticipantDocument,
-    ParticipantEntity,
-} from '@app/gift-exchanges/schemas';
+import { GIFT_EXCHANGES_MODULE_COLLECTIONS } from '../constants';
+import { ParticipantDocument, ParticipantEntity } from '../schemas';
 
 @Injectable()
 export class ParticipantsService {
     constructor(
-        @InjectModel(COLLECTIONS.Participant)
+        @InjectModel(GIFT_EXCHANGES_MODULE_COLLECTIONS.Participant)
         private readonly model: Model<ParticipantDocument>,
     ) {}
 

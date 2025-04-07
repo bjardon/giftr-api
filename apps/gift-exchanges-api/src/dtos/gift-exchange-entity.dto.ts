@@ -1,6 +1,6 @@
 import { ApiProperty, OmitType } from '@nestjs/swagger';
-import { GiftExchangeEntity } from '../schemas';
 import { ObjectId } from 'mongoose';
+import { GiftExchangeEntity } from '../schemas';
 
 export class GiftExchangeEntityDto extends OmitType(GiftExchangeEntity, []) {
     @ApiProperty({

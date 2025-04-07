@@ -5,13 +5,12 @@ import {
     ApiOperation,
     ApiTags,
 } from '@nestjs/swagger';
-import { AuthGuard } from '@app/auth/guards';
-import { UserDocument } from '@app/users/schemas';
+import { Types } from 'mongoose';
+import { AuthGuard } from '@shared/auth';
+import { User, UserDocument } from '@shared/users';
 import { WishListItemEntityDto, CreateWishListItemDto } from '../dtos';
 import { WishListItemDocument } from '../schemas';
 import { WishListItemsService } from '../services';
-import { Types } from 'mongoose';
-import { User } from '@app/users/decorators';
 
 @ApiTags('Participants/WishListItems')
 @Controller('participants/:participantId/wish-list-items')
