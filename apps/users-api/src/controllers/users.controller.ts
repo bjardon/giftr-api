@@ -1,8 +1,4 @@
 import { Body, Controller, Get, Patch, UseGuards } from '@nestjs/common';
-import { AuthGuard } from '@app/auth/guards';
-import { UsersService } from '@app/users/services';
-import { User } from '@app/users/decorators';
-import { UserDocument } from '@app/users/schemas';
 import {
     ApiBearerAuth,
     ApiOkResponse,
@@ -10,7 +6,9 @@ import {
     ApiTags,
     ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
-import { UpdateUserDto, UserEntityDto } from '@app/users/dtos';
+import { AuthGuard } from '@shared/auth';
+import { User, UserDocument, UsersService } from '@shared/users';
+import { UpdateUserDto, UserEntityDto } from '../dtos';
 
 @Controller('users')
 @ApiTags('Users')

@@ -1,5 +1,5 @@
 import { ApiProperty, OmitType } from '@nestjs/swagger';
-import { UserEntity } from '@app/users/schemas';
+import { UserEntity } from '@shared/users';
 
 export class UserEntityDto extends OmitType(UserEntity, []) {
     @ApiProperty({
