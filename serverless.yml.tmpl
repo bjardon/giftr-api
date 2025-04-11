@@ -18,9 +18,11 @@ functions:
             - http:
                   method: ANY
                   path: /users-api
+                  cors: true
             - http:
                   method: ANY
                   path: '/users-api/{proxy+}'
+                  cors: true
 
     gift-exchanges-api:
         handler: dist/apps/gift-exchanges-api/main.handler
@@ -30,7 +32,9 @@ functions:
             - http:
                   method: ANY
                   path: /gift-exchanges-api
+                  cors: true
             - http:
                   method: ANY
                   path: '/gift-exchanges-api/{proxy+}'
+                  cors: true
 
