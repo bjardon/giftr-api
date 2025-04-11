@@ -7,6 +7,8 @@ let server: Handler;
 
 async function bootstrap() {
     const microservice = await NestFactory.create(UsersApiModule);
+    microservice.enableCors({ origin: '*' });
+
     await microservice.init();
 
     const expressApp = microservice.getHttpAdapter().getInstance();
