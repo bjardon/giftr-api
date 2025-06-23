@@ -4,24 +4,23 @@
     "description": "",
     "author": "",
     "private": true,
-    "license": "UNLICENSED",
+    "license": "MIT",
     "scripts": {
-        "build": "nest build",
-        "format:check": "prettier --check \"src/**/*.ts\" \"test/**/*.ts\"",
-        "format:fix": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
-        "start": "nest start",
-        "start:dev": "nest start --watch",
-        "start:debug": "nest start --debug --watch",
-        "start:prod": "node dist/main",
-        "lint:check": "eslint \"{src,test}/**/*.ts\"",
-        "lint:fix": "eslint \"{src,test}/**/*.ts\" --fix",
+        "build:users": "nest build users-api",
+        "build:gift-exchanges": "nest build gift-exchanges-api",
+        "format:check": "prettier --check \"apps/**/*.ts\" \"libs/**/*.ts\"",
+        "format:fix": "prettier --write \"apps/**/*.ts\" \"libs/**/*.ts\"",
+        "lint:check": "eslint \"{apps,libs}/**/*.ts\"",
+        "lint:fix": "eslint \"{apps,libs}/**/*.ts\" --fix",
         "test": "jest",
         "test:watch": "jest --watch",
         "test:cov": "jest --coverage",
         "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-        "test:e2e": "jest --config ./test/jest-e2e.json"
+        "test:e2e:gift-exchanges": "jest --config ./apps/gift-exchanges-api/test/jest-e2e.json",
+        "test:e2e:users": "jest --config ./apps/users-api/test/jest-e2e.json"
     },
     "dependencies": {
+        "@codegenie/serverless-express": "^4.16.0",
         "@getbrevo/brevo": "^2.2.0",
         "@nestjs/common": "^10.0.0",
         "@nestjs/config": "^3.2.3",
@@ -31,6 +30,7 @@
         "@nestjs/swagger": "^7.4.0",
         "@types/lodash": "^4.17.7",
         "await-to-js": "^3.0.0",
+        "aws-lambda": "^1.0.7",
         "firebase-admin": "^12.3.1",
         "lodash": "^4.17.21",
         "mongoose": "^8.5.3",
@@ -41,6 +41,7 @@
         "@nestjs/cli": "^10.0.0",
         "@nestjs/schematics": "^10.0.0",
         "@nestjs/testing": "^10.0.0",
+        "@types/aws-lambda": "^8.10.148",
         "@types/express": "^4.17.17",
         "@types/jest": "^29.5.2",
         "@types/node": "^20.3.1",
@@ -52,6 +53,7 @@
         "eslint-plugin-prettier": "^5.0.0",
         "jest": "^29.5.0",
         "prettier": "^3.0.0",
+        "serverless-offline": "^14.4.0",
         "source-map-support": "^0.5.21",
         "supertest": "^7.0.0",
         "ts-jest": "^29.1.0",
@@ -66,7 +68,7 @@
             "json",
             "ts"
         ],
-        "rootDir": "src",
+        "rootDir": ".",
         "testRegex": ".*\\.spec\\.ts$",
         "transform": {
             "^.+\\.(t|j)s$": "ts-jest"
@@ -74,7 +76,18 @@
         "collectCoverageFrom": [
             "**/*.(t|j)s"
         ],
-        "coverageDirectory": "../coverage",
-        "testEnvironment": "node"
+        "coverageDirectory": "./coverage",
+        "testEnvironment": "node",
+        "roots": [
+            "<rootDir>/apps/",
+            "<rootDir>/libs/"
+        ],
+        "moduleNameMapper": {
+            "^@shared/auth(|/.*)$": "<rootDir>/libs/auth/src/$1",
+            "^@shared/config(|/.*)$": "<rootDir>/libs/config/src/$1",
+            "^@shared/emails(|/.*)$": "<rootDir>/libs/emails/src/$1",
+            "^@shared/firebase(|/.*)$": "<rootDir>/libs/firebase/src/$1",
+            "^@shared/users(|/.*)$": "<rootDir>/libs/users/src/$1"
+        }
     }
 }

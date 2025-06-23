@@ -17,11 +17,18 @@
         "strictBindCallApply": false,
         "forceConsistentCasingInFileNames": false,
         "noFallthroughCasesInSwitch": false,
+        "esModuleInterop": true,
         "paths": {
-            "@app/*": ["src/app/*"],
-            "@modules/*": ["src/modules/*"],
-            "@config/*": ["src/config/*"],
-            "@test/*": ["test/*"]
+            "@shared/firebase": ["libs/firebase/src"],
+            "@shared/firebase/*": ["libs/firebase/src/*"],
+            "@shared/auth": ["libs/auth/src"],
+            "@shared/auth/*": ["libs/auth/src/*"],
+            "@shared/emails": ["libs/emails/src"],
+            "@shared/emails/*": ["libs/emails/src/*"],
+            "@shared/config": ["libs/config/src"],
+            "@shared/config/*": ["libs/config/src/*"],
+            "@shared/users": ["libs/users/src"],
+            "@shared/users/*": ["libs/users/src/*"]
         }
     }
 }
